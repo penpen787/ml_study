@@ -48,9 +48,13 @@ W_conv1 = weight_variable([5, 5, 1, 32], 'W_conv1')
 b_conv1 = bias_variable([32], 'b1')
 
 # 입력 이미지에 합성곱 적용 후, 활성함수(relu) 적용 -> maxpool
-y_1 = conv2d(x_image, W_conv1) + b_conv1  # 계층1
-h_conv1 = tf.nn.relu(y_1)  # 계층2 28x28
-h_pool1 = max_pool_2x2(h_conv1)  # 계층3 14x14
+with tf.name_scope("L1") as scope:
+    y_1 = conv2d(x_image, W_conv1) + b_conv1  # 계층1
+    y_1_hist = tf.summary.histogram('y_1_hist', y_1)
+with tf.name_scope("L2") as scope:
+    h_conv1 = tf.nn.relu(y_1)  # 계층2 28x28
+with tf.name_scope("L3") as scope:
+    h_pool1 = max_pool_2x2(h_conv1)  # 계층3 14x14
 
 '''
  두번째 합성곱계층 & 풀링계층
@@ -61,9 +65,12 @@ h_pool1 = max_pool_2x2(h_conv1)  # 계층3 14x14
 W_conv2 = weight_variable([5, 5, 32, 64], 'W_conv2')
 b_conv2 = bias_variable([64], 'b2')
 
-y_2 = conv2d(h_pool1, W_conv2) + b_conv2  # 계층4
-h_conv2 = tf.nn.relu(y_2)  # 계층5 14x14
-h_pool2 = max_pool_2x2(h_conv2)  # 계층6 7x7
+with tf.name_scope("L4") as scope:
+    y_2 = conv2d(h_pool1, W_conv2) + b_conv2  # 계층4
+with tf.name_scope("L5") as scope:
+    h_conv2 = tf.nn.relu(y_2)  # 계층5 14x14
+with tf.name_scope("L6") as scope:
+    h_pool2 = max_pool_2x2(h_conv2)  # 계층6 7x7
 
 # 소트프맥스 계층에 주입하기 위해 7x7 출력값을 완전 열결 계층(fully connected layer) 에 연결
 # 뉴런은 1024개 사용
@@ -98,28 +105,44 @@ y_conv=tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 ''' 훈련 & 평가 '''
 
 # 오차확인 - 책 107p 참조
-cross_entropy = -tf.reduce_sum(y_*tf.log(y_conv))
-# 경사하강법 대신, 아담 옵티마이저를 사용
-train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
-# 모델 평가 - 정확도
-correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_,1))
-accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+with tf.name_scope('cost') as scope:
+    cross_entropy = -tf.reduce_sum(y_*tf.log(y_conv))
+    # 경사하강법 대신, 아담 옵티마이저를 사용
+    train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
+    cross_entropy_value = tf.summary.scalar('cross_entropy_value', cross_entropy)
 
-sess = tf.Session()
 
-sess.run(tf.initialize_all_variables())
-for i in range(200):
-    # 배치단위로 실행
-    batch = mnist.train.next_batch(50)
-    if i%10 == 0:
-        # 배치 단위의 비용(loss) 평가
-        loss = sess.run(cross_entropy, feed_dict={x:batch[0], y_: batch[1], keep_prob: 1.0})
-        # 배치 단위의 정확도평가
-        train_accuracy = sess.run(accuracy, feed_dict={x:batch[0], y_: batch[1], keep_prob: 1.0})
-        print("step %d, batch loss = %g, training accuracy %g"%(i, loss, train_accuracy))
+with tf.name_scope('accuracy') as scope:
+    # 모델 평가 - 정확도
+    correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_,1))
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+    accuracy_value = tf.summary.scalar('accu_value', accuracy)
 
-    sess.run(train_step,feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+with tf.Session() as sess:
 
-# 테스트 set 결과에 대한 정확도
-print("test accuracy %g"% sess.run(accuracy, feed_dict={
-    x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+    sess.run(tf.global_variables_initializer())
+
+    image_summary = tf.summary.image("IMAGEs", x_image)
+
+    merged = tf.summary.merge_all()
+    writer = tf.summary.FileWriter("./logs/cnn_logs", sess.graph)
+
+    for i in range(200):
+        # 배치단위로 실행
+        batch = mnist.train.next_batch(50)
+        if i%10 == 0:
+            # 배치 단위의 비용(loss) 평가
+            loss, summary, imgSummary = sess.run([cross_entropy, merged, image_summary], feed_dict={x:batch[0], y_: batch[1], keep_prob: 1.0})
+            writer.add_summary(summary, i)
+            writer.add_summary(imgSummary, i)
+            # 배치 단위의 정확도평가
+            train_accuracy, lossSummary = sess.run([accuracy, merged], feed_dict={x:batch[0], y_: batch[1], keep_prob: 1.0})
+            writer.add_summary(lossSummary, i)
+
+            print("step %d, batch loss = %g, training accuracy %g"%(i, loss, train_accuracy))
+
+        sess.run(train_step,feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+
+    # 테스트 set 결과에 대한 정확도
+    print("test accuracy %g"% sess.run(accuracy, feed_dict={
+        x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
