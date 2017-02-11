@@ -42,5 +42,24 @@ for i in range(len(x)):
 
 print("Accuracy: " + str(float(accuracy_cnt) / len(x)))
 
+'''
+batch 처리
+여기서 말하는 batch 는 묶음 데이터를 의미하여 IO 연산이 CPU 연산에 비해 느리므로
+다량의 이미지를 한번에 로딩하여 한번에 연산 처리함
+'''
+xb, tb = get_data()
+network_b = init_network()
+
+batch_size = 100
+accuracy_cnt_b = 0
+
+for i in range(0, len(x), batch_size):
+    x_batch = x[i:i+batch_size]
+    y_batch = predict(network_b, x_batch)
+    p = np.argmax(y_batch, axis=1)
+    accuracy_cnt_b += np.sum(p == t[i:i+batch_size])
+
+print("Accuracy: " + str(float(accuracy_cnt_b) / len(xb)))
+
 
 
