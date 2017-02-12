@@ -105,3 +105,4 @@ gen### Example user template template
 *.iml
 out
 gen
+/deep_learning_from_scratch/mnist.pkl
