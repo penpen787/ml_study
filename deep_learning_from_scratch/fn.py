@@ -16,3 +16,6 @@ def cross_entropy_error(y, t):
     delta = 1e-7  # np.log 에  0 입력시, 마이너스 무한대(-inf)가 출력되기 때문에, 아주 작은 값을 더해 0이 되지 않도록 함
     return -np.sum(t * np.log(y + delta))
 
+# 평균 제곱 오차 (MSE)
+def mean_squred_error(y, t):
+    return 0.5 * np.sum((y-t)**2)
