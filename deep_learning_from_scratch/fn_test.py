@@ -30,8 +30,26 @@ y = function_1(x)
 plt.xlabel("x")
 plt.ylabel("f(x)")
 plt.plot(x, y)
-plt.show()
+# plt.show()
 
 # x=5, x=10 일때 미분값 계산
 print(numerical_diff_middle(function_1, 5))
 print(numerical_diff_middle(function_1, 10))
+
+'''
+편미분 : partial derivative
+'''
+# f(x1, x2) = x1^2 + x2^2
+def function_two_variable(x):
+    return x[0]**2 + x[1]**2  # or np.sum(x**2)
+
+# 상미분을 풀기 위해선 풀고자하는 하나의 변수만 남겨 논 후, 나머지는 상수처리함
+# x1 = 3, x2 = 4 일때 x1 에 대해 편미분 하라
+def function_x1(x1):
+    return x1*x1 + 4.0**2.0
+
+def function_x2(x2):
+    return 3.0**2.0 + x2*x2
+
+print(numerical_diff_middle(function_x1, 3.0))  # 6.00000000000378
+print(numerical_diff_middle(function_x2, 4.0))  # 7.999999999999119
