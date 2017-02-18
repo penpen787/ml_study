@@ -33,7 +33,6 @@ print(softmax(c))
 d = np.array([1006, 998])
 print(softmax(d))
 '''
-
 e = np.array([100, 50])
 print(softmax(e))  # [  1.00000000e+00   1.92874985e-22]
 

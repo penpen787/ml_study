@@ -11,7 +11,7 @@ print(x_train.shape)
 print(t_train.shape)
 
 # 무작위 10개만 추출
-# ex
+# ex [45990 58707  6259 44305  7656 42365 56765 52270   874 47874]
 print(np.random.choice(60000, 10))
 
 train_size = x_train.shape[0]
@@ -19,4 +19,3 @@ batch_size = 10
 batch_mask = np.random.choice(train_size, batch_size)
 x_batch = x_train[batch_mask]
 t_batch = t_train[batch_mask]
-
