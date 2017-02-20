@@ -42,7 +42,7 @@ def cross_entropy_error_number_label(y, t):
 def mean_squred_error(y, t):
     return 0.5 * np.sum((y-t)**2)
 
-def numberical_gradient(f, x):
+def numerical_gradient(f, x):
     h = 1e-4  # 0.0001
     grad = np.zeros_like(x)  # x와 형상이 같은 배열을 생성
 
