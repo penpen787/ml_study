@@ -1,6 +1,7 @@
 # 책에 나오는 습작용 공식들 정리
 import numpy as np
 import matplotlib.pylab as plt
+import fn
 
 # 미분의 나쁜 예
 # h 를 가급적 작은 값을 넣고 싶어 10e-50 을 대입함
@@ -51,3 +52,8 @@ def function_x2(x2):
 
 print(numerical_diff_middle(function_x1, 3.0))  # 6.00000000000378
 print(numerical_diff_middle(function_x2, 4.0))  # 7.999999999999119
+
+# 세점 (3,4), (0,2), (3,0) 에서 기울기
+print(fn.numerical_gradient(function_two_variable, np.array([3.0, 4.0])))
+print(fn.numerical_gradient(function_two_variable, np.array([0.0, 2.0])))
+print(fn.numerical_gradient(function_two_variable, np.array([3.0, 0.0])))
