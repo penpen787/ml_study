@@ -57,3 +57,12 @@ print(numerical_diff_middle(function_x2, 4.0))  # 7.999999999999119
 print(fn.numerical_gradient(function_two_variable, np.array([3.0, 4.0])))
 print(fn.numerical_gradient(function_two_variable, np.array([0.0, 2.0])))
 print(fn.numerical_gradient(function_two_variable, np.array([3.0, 0.0])))
+
+# 경사하강법으로 f(x1, x2) = x1**2 + x2**2 의 최솟값을 구하라
+def function_2(x):
+    return x[0]**2 + x[1]**2
+
+init_x = np.array([-3.0, 4.0])
+g_d_test = fn.gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100)
+print(g_d_test)
+
