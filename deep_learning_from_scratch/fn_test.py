@@ -66,3 +66,10 @@ init_x = np.array([-3.0, 4.0])
 g_d_test = fn.gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100)
 print(g_d_test)
 
+# 경사하강법 학습률이 너무 클때 & 너무 작을때
+# 학습률이 너무 작거나 크면 너무 큰값으로 발산해버리거나 거의 갱신되지 않음
+g_d_test2 = fn.gradient_descent(function_2, init_x=init_x, lr=10.0, step_num=100)
+print(g_d_test2)
+g_d_test3 = fn.gradient_descent(function_2, init_x=init_x, lr=1e-10, step_num=100)
+print(g_d_test3)
+
