@@ -18,6 +18,4 @@ class SimpleNet:
         return loss
 
 net = SimpleNet()
-print(net.W) # 램덤 & 정규화된 가중치 매개변수
-
-
+print(net.W)  # 램덤 & 정규화된 가중치 매개변수
