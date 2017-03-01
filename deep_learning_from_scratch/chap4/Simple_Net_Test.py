@@ -19,3 +19,13 @@ class SimpleNet:
 
 net = SimpleNet()
 print(net.W)  # 램덤 & 정규화된 가중치 매개변수
+
+x =  np.array([0.6, 0.9])
+p = net.predict(x)
+print(p)
+
+print(np.argmax(p))
+
+t = np.array([0, 0, 1])
+net.loss(x, t)
+
