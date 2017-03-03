@@ -29,5 +29,5 @@ print(np.argmax(p))
 t = np.array([0, 0, 1])
 net.loss(x, t)
 
-f = lambda w: net.loss(x, t)
-dW = fn.numerical_gradient(f, net.W)
+# f = lambda w: net.loss(x, t)
+# dW = fn.numerical_gradient(f, net.W)
