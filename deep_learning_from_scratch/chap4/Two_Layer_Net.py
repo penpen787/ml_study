@@ -9,5 +9,6 @@ class TwoLayerNet:
         # 가중치 초기화
         self.params = {}
         self.params['W1'] = weight_init_std * np.random.randn(input_size, hidden_size)
+        self.params['b1'] = np.zeros(hidden_size)
 
 
