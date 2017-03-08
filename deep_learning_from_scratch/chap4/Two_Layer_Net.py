@@ -13,4 +13,7 @@ class TwoLayerNet:
         self.params['W2'] = weight_init_std * np.random.randn(hidden_size, output_size)
         self.params['b2'] = np.zeros(output_size)
 
+    def predict(self, x):
+        W1, W2 = self.params['W1'], self.params['W2']
+
 
