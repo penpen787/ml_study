@@ -15,5 +15,8 @@ class TwoLayerNet:
 
     def predict(self, x):
         W1, W2 = self.params['W1'], self.params['W2']
+        b1, b2 = self.params['b1'], self.params['b2']
+
+        a1 = np.dot(x, W1) + b1
 
 
