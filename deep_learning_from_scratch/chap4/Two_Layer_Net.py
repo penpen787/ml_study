@@ -18,5 +18,9 @@ class TwoLayerNet:
         b1, b2 = self.params['b1'], self.params['b2']
 
         a1 = np.dot(x, W1) + b1
+        z1 = fn.sigmoid(a1)
+        a2 = np.dot(z1, W2) + b2
+        y = fn.softmax(a2)
+
 
 
