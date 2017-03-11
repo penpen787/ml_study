@@ -22,5 +22,14 @@ class TwoLayerNet:
         a2 = np.dot(z1, W2) + b2
         y = fn.softmax(a2)
 
+        return y
+
+    # x : 입력데이터 t : 정답레이블
+    def loss(self, x, t):
+        y = self.predict(x)
+        return fn.cross_entropy_error(y, t)
+
+
+
 
 
