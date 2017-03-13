@@ -37,6 +37,10 @@ class TwoLayerNet:
         accuracy = np.sum(y == t) / float(x.shape[0])
         return accuracy
 
+    # x : 입력 데이터 t: 정답레이블
+    def numerical_gradient(self, x, t):
+        loss_W = lambda W: self.loss(x, t)
+
 
 
 
