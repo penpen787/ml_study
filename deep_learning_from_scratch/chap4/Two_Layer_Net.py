@@ -41,6 +41,8 @@ class TwoLayerNet:
     def numerical_gradient(self, x, t):
         loss_W = lambda W: self.loss(x, t)
 
+        grads = {}
+
 
 
 
